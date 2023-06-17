@@ -5,6 +5,8 @@ const canvas_1 = require("canvas");
 const emoji = require("node-emoji");
 const fs = require("fs");
 const path = require("path");
+const twemoji = require("twemoji");
+const icon_data_1 = require("./icon_data");
 class CanvasEmoji {
     constructor(ctx) {
         this.canvasCtx = ctx;
@@ -26,6 +28,16 @@ class CanvasEmoji {
             str,
             emojiArr,
         };
+    }
+    findEmojiSrcFromKey(key) {
+        const srcData = icon_data_1.default.find((item) => {
+            if (item.key === key) {
+                return true;
+            }
+        });
+        if (srcData) {
+            return srcData.src;
+        }
     }
     drawPngReplaceEmoji(data) {
         const { canvasCtx } = this;
@@ -97,8 +109,10 @@ class CanvasEmoji {
         canvasCtx.font = font;
         let { text, x, length } = data;
         const emojiArr = [];
+        const emojiData = {};
         text = emoji.replace(text, (item) => {
             emojiArr.push(`{${item.key}}`);
+            emojiData[item.key] = item.emoji;
             return `{${item.key}}`;
         });
         const loadImages = [];
@@ -110,6 +124,15 @@ class CanvasEmoji {
                 .replace("}", "")
                 .replace(/_/g, "-");
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
+            const key = twemoji.convert.toCodePoint(emojiData[emojiItem]);
+            console.log("key", key);
+            if (key) {
+                const src = this.findEmojiSrcFromKey(key);
+                console.log("src", src);
+                if (src) {
+                    emojiSrc = src;
+                }
+            }
             console.log(emojiSrc);
             const url = encodeURI(emojiSrc);
             const emojiImg = await (0, canvas_1.loadImage)(url);

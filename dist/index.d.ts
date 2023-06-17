@@ -18,6 +18,7 @@ export declare class CanvasEmoji {
         str: string;
         emojiArr: any;
     };
+    findEmojiSrcFromKey(key: string): string;
     drawPngReplaceEmoji(data: DrawPngReplaceEmojiParams): {
         x: number;
     };

@@ -58,6 +58,15 @@ class CanvasEmoji {
             .replace("}", "")
             .replace(/_/g, "-");
         let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
+        const key = twemoji.convert.toCodePoint(emojiName);
+        console.log("key", key);
+        if (key) {
+            const src = this.findEmojiSrcFromKey(key);
+            console.log("src", src);
+            if (src) {
+                emojiSrc = src;
+            }
+        }
         const url = encodeURI(emojiSrc);
         console.log("url", url);
         const image = await (0, canvas_1.loadImage)(url);
