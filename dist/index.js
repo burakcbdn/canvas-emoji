@@ -156,6 +156,7 @@ class CanvasEmoji {
             const ctxText = canvasCtx.measureText(text.substring(0, index));
             x += ctxText.width;
             const emojiImg = emojiMap.get(emojiItem);
+            canvasCtx.drawImage(emojiImg, x, y - (5 / 6) * emojiH, emojiW, emojiH);
             x += emojiW;
             text = text.substring(index + emojiItem.length);
             if (i === emojiArr.length - 1) {

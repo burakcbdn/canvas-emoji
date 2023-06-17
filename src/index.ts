@@ -223,13 +223,13 @@ export class CanvasEmoji {
             x += ctxText.width;
 
             const emojiImg = emojiMap.get(emojiItem);
-            // canvasCtx.drawImage(
-            //     emojiImg,
-            //     x,
-            //     y - (5 / 6) * emojiH,
-            //     emojiW,
-            //     emojiH
-            // );
+            canvasCtx.drawImage(
+                emojiImg,
+                x,
+                y - (5 / 6) * emojiH,
+                emojiW,
+                emojiH
+            );
             x += emojiW;
 
             text = text.substring(index + emojiItem.length);
