@@ -109,7 +109,6 @@ class CanvasEmoji {
                 emojiMap.set(emojiName, src);
             }
             emojiImg.src = src;
-            canvasCtx.drawImage(emojiImg, x, y - (5 / 6) * emojiH, emojiW, emojiH);
             x += emojiW;
             text = text.substr(index + emojiItem.length);
             i++;

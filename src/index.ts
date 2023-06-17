@@ -4,8 +4,9 @@ import * as emoji from "node-emoji";
 import * as fs from "fs";
 import * as path from "path";
 
-const twemoji = require("twemoji");
 import emojis from "./icon_data";
+
+const twemoji = require("twemoji");
 
 export interface DrawPngReplaceEmojiParams {
     text: string;
@@ -32,6 +33,8 @@ export class CanvasEmoji {
      */
     getEmojiKeys(str: string) {
         const emojiArr: string[] = [];
+
+        
         emoji.replace(str, (item: any) => {
             emojiArr.push(`${item.key}`);
         });
@@ -164,6 +167,7 @@ export class CanvasEmoji {
         const emojiArr: string[] = [];
         const emojiData: any = {};
         text = emoji.replace(text, (item: any) => {
+        
             emojiArr.push(`{${item.key}}`);
             emojiData[item.key] = item.emoji;
             return `{${item.key}}`;
@@ -179,10 +183,9 @@ export class CanvasEmoji {
 
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
 
-            const key = twemoji.convert.toCodePoint(emojiData[ emojiItem
-                .replace("{", "")
-                .replace("}", "")]);
-
+            const key = twemoji.convert.toCodePoint(
+                emojiData[emojiItem.replace("{", "").replace("}", "")]
+            );
             if (key) {
                 const src = this.findEmojiSrcFromKey(key);
                 if (src) {
@@ -220,13 +223,13 @@ export class CanvasEmoji {
             x += ctxText.width;
 
             const emojiImg = emojiMap.get(emojiItem);
-            canvasCtx.drawImage(
-                emojiImg,
-                x,
-                y - (5 / 6) * emojiH,
-                emojiW,
-                emojiH
-            );
+            // canvasCtx.drawImage(
+            //     emojiImg,
+            //     x,
+            //     y - (5 / 6) * emojiH,
+            //     emojiW,
+            //     emojiH
+            // );
             x += emojiW;
 
             text = text.substring(index + emojiItem.length);

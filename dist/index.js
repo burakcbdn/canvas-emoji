@@ -5,8 +5,8 @@ const canvas_1 = require("canvas");
 const emoji = require("node-emoji");
 const fs = require("fs");
 const path = require("path");
-const twemoji = require("twemoji");
 const icon_data_1 = require("./icon_data");
+const twemoji = require("twemoji");
 class CanvasEmoji {
     constructor(ctx) {
         this.canvasCtx = ctx;
@@ -124,9 +124,7 @@ class CanvasEmoji {
                 .replace("}", "")
                 .replace(/_/g, "-");
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
-            const key = twemoji.convert.toCodePoint(emojiData[emojiItem
-                .replace("{", "")
-                .replace("}", "")]);
+            const key = twemoji.convert.toCodePoint(emojiData[emojiItem.replace("{", "").replace("}", "")]);
             if (key) {
                 const src = this.findEmojiSrcFromKey(key);
                 if (src) {
@@ -158,7 +156,6 @@ class CanvasEmoji {
             const ctxText = canvasCtx.measureText(text.substring(0, index));
             x += ctxText.width;
             const emojiImg = emojiMap.get(emojiItem);
-            canvasCtx.drawImage(emojiImg, x, y - (5 / 6) * emojiH, emojiW, emojiH);
             x += emojiW;
             text = text.substring(index + emojiItem.length);
             if (i === emojiArr.length - 1) {

@@ -1,6 +1,6 @@
 declare const emojis: {
-    href: string;
-    src: string;
     key: string;
+    src: string;
+    href: string;
 }[];
 export default emojis;
