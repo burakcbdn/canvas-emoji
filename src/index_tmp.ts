@@ -88,14 +88,22 @@ export class CanvasEmoji {
     async fun(emojiItem: string, emojiStyle: string) {
         const emojiName = emojiItem.replace("{", "").replace("}", "");
 
-        // replace all _ with -
-
         const emojiID = emojiItem
             .replace("{", "")
             .replace("}", "")
             .replace(/_/g, "-");
 
         let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
+
+        const key = twemoji.convert.toCodePoint(emojiName);
+
+        if (key) {
+            const src = this.findEmojiSrcFromKey(key);
+
+            if (src) {
+                emojiSrc = src;
+            }
+        }
 
         const url = encodeURI(emojiSrc);
 
@@ -241,9 +249,9 @@ export class CanvasEmoji {
             x += ctxText.width;
 
             const emojiID = emojiItem
-            .replace("{", "")
-            .replace("}", "")
-            .replace(/_/g, "-");
+                .replace("{", "")
+                .replace("}", "")
+                .replace(/_/g, "-");
 
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
 
@@ -261,12 +269,19 @@ export class CanvasEmoji {
             console.log("naturalHeight: ", emojiImg.naturalHeight);
             console.log(emojiImg.dataMode);
 
-            console.log("X: ", x, "Y: ", y, "emojiW: ", emojiW, "emojiH: ", emojiH);
-            
-    
+            console.log(
+                "X: ",
+                x,
+                "Y: ",
+                y,
+                "emojiW: ",
+                emojiW,
+                "emojiH: ",
+                emojiH
+            );
 
             canvasCtx.drawImage(
-                emojiImg ,
+                emojiImg,
                 x,
                 y - (5 / 6) * emojiH,
                 emojiW,
