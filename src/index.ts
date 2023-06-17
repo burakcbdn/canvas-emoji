@@ -4,6 +4,9 @@ import * as emoji from "node-emoji";
 import * as fs from "fs";
 import * as path from "path";
 
+const twemoji = require("twemoji");
+import emojis from "./icon_data";
+
 export interface DrawPngReplaceEmojiParams {
     text: string;
     fillStyle: string;
@@ -49,6 +52,20 @@ export class CanvasEmoji {
             str,
             emojiArr,
         };
+    }
+
+    findEmojiSrcFromKey(key: string) {
+        // replace all _ with - on emoji name
+
+        const srcData = emojis.find((item: any) => {
+            if (item.key === key) {
+                return true;
+            }
+        });
+
+        if (srcData) {
+            return srcData.src;
+        }
     }
 
     /**
@@ -145,8 +162,10 @@ export class CanvasEmoji {
         canvasCtx.font = font;
         let { text, x, length } = data;
         const emojiArr: string[] = [];
+        const emojiData: any = {};
         text = emoji.replace(text, (item: any) => {
             emojiArr.push(`{${item.key}}`);
+            emojiData[item.key] = item.emoji;
             return `{${item.key}}`;
         });
         const loadImages = [];
@@ -159,6 +178,20 @@ export class CanvasEmoji {
                 .replace(/_/g, "-");
 
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
+
+            const key = twemoji.convert.toCodePoint(emojiData[emojiItem]);
+
+            console.log("key", key);
+
+            if (key) {
+                const src = this.findEmojiSrcFromKey(key);
+
+                console.log("src", src);
+
+                if (src) {
+                    emojiSrc = src;
+                }
+            }
 
             console.log(emojiSrc);
 
