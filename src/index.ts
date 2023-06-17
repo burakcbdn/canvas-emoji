@@ -179,7 +179,15 @@ export class CanvasEmoji {
 
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
 
-            const key = twemoji.convert.toCodePoint(emojiData[emojiItem]);
+            console.log(emojiData);
+
+            console.log("key", emojiData[ emojiItem
+                .replace("{", "")
+                .replace("}", "")])
+
+            const key = twemoji.convert.toCodePoint(emojiData[ emojiItem
+                .replace("{", "")
+                .replace("}", "")]);
 
             console.log("key", key);
 
