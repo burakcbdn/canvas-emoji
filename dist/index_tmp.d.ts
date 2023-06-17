@@ -1,4 +1,4 @@
-import { CanvasRenderingContext2D } from "canvas";
+import { CanvasRenderingContext2D, Image } from "canvas";
 export interface DrawPngReplaceEmojiParams {
     text: string;
     fillStyle: string;
@@ -18,6 +18,9 @@ export declare class CanvasEmoji {
         str: string;
         emojiArr: any;
     };
+    findEmojiSrc(emojiName: string): string;
+    findEmojiSrcFromKey(key: string): string;
+    fun(emojiItem: string, emojiStyle: string): Promise<Image>;
     drawPngReplaceEmoji(data: DrawPngReplaceEmojiParams): {
         x: number;
     };

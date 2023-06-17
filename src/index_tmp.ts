@@ -3,6 +3,9 @@ import { CanvasRenderingContext2D, Image, loadImage } from "canvas";
 import * as emoji from "node-emoji";
 import * as fs from "fs";
 import * as path from "path";
+import emojis from "./icon_data";
+
+const twemoji = require("twemoji");
 
 export interface DrawPngReplaceEmojiParams {
     text: string;
@@ -49,6 +52,61 @@ export class CanvasEmoji {
             str,
             emojiArr,
         };
+    }
+
+    findEmojiSrc(emojiName: string) {
+        // replace all _ with - on emoji name
+
+        const emojiNameNew = emojiName.replace(/_/g, "-");
+
+        console.log("emojiNameNew", emojiNameNew);
+
+        const srcData = emojis.find((item: any) => {
+            if (item.href === emojiName.replace(/_/g, "-")) {
+                return true;
+            }
+        });
+
+        if (srcData) {
+            return srcData.src;
+        }
+    }
+    findEmojiSrcFromKey(key: string) {
+        // replace all _ with - on emoji name
+
+        const srcData = emojis.find((item: any) => {
+            if (item.key === key) {
+                return true;
+            }
+        });
+
+        if (srcData) {
+            return srcData.src;
+        }
+    }
+
+    async fun(emojiItem: string, emojiStyle: string) {
+        const emojiName = emojiItem.replace("{", "").replace("}", "");
+
+        // replace all _ with -
+
+        const emojiID = emojiItem
+            .replace("{", "")
+            .replace("}", "")
+            .replace(/_/g, "-");
+
+        let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
+
+        const url = encodeURI(emojiSrc);
+
+        console.log("url", url);
+
+        const image = await loadImage(url);
+
+        image.onload = () => {
+            console.log("image loaded");
+        };
+        return image;
     }
 
     /**
@@ -145,37 +203,28 @@ export class CanvasEmoji {
         canvasCtx.font = font;
         let { text, x, length } = data;
         const emojiArr: string[] = [];
+        const emojiData: any = {};
         text = emoji.replace(text, (item: any) => {
+            emojiData[item.key] = twemoji.convert.toCodePoint(item.emoji);
+
             emojiArr.push(`{${item.key}}`);
             return `{${item.key}}`;
         });
         const loadImages = [];
         const emojiSet = new Set();
         const emojiMap = new Map();
-        const fun = async (emojiItem: string) => {
-            const emojiID = emojiItem
-                .replace("{", "")
-                .replace("}", "")
-                .replace(/_/g, "-");
 
-            let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
-
-            console.log(emojiSrc);
-
-            const url = encodeURI(emojiSrc);
-            const emojiImg = await loadImage(url);
-            emojiMap.set(emojiItem, emojiImg);
-        };
         for (const emojiItem of emojiArr) {
             if (emojiSet.has(emojiItem)) {
                 continue;
             }
             emojiSet.add(emojiItem);
-            loadImages.push(fun(emojiItem));
+            //await fun(emojiItem)
         }
-        await Promise.all(loadImages);
+
         for (let i = 0; i < emojiArr.length; i++) {
             const emojiItem = emojiArr[i];
+            console.log("emojiItem", emojiItem);
             const index = text.indexOf(emojiItem);
             if (
                 length !== -1 &&
@@ -191,9 +240,33 @@ export class CanvasEmoji {
             const ctxText = canvasCtx.measureText(text.substring(0, index));
             x += ctxText.width;
 
-            const emojiImg = emojiMap.get(emojiItem);
+            const emojiID = emojiItem
+            .replace("{", "")
+            .replace("}", "")
+            .replace(/_/g, "-");
+
+            let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
+
+            console.log("emojiSrc: ", emojiSrc);
+
+            let emojiImg: Image = await loadImage(encodeURI(emojiSrc));
+
+            emojiImg.src = emojiSrc;
+
+            console.log("Complete: ", emojiImg.complete);
+            console.log("src: ", emojiImg.src);
+            console.log("width: ", emojiImg.width);
+            console.log("height: ", emojiImg.height);
+            console.log("naturalWidth: ", emojiImg.naturalWidth);
+            console.log("naturalHeight: ", emojiImg.naturalHeight);
+            console.log(emojiImg.dataMode);
+
+            console.log("X: ", x, "Y: ", y, "emojiW: ", emojiW, "emojiH: ", emojiH);
+            
+    
+
             canvasCtx.drawImage(
-                emojiImg,
+                emojiImg ,
                 x,
                 y - (5 / 6) * emojiH,
                 emojiW,

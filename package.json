@@ -9,10 +9,6 @@
     "format": "prettier --write '**/*.{ts,json,md}'",
     "prepublishOnly": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/realcxj1989/canvas-emoji.git"
-  },
   "keywords": [],
   "author": "realcxj1989 <362377487@qq.com>",
   "license": "MIT",
@@ -22,7 +18,8 @@
   "homepage": "https://github.com/realcxj1989/canvas-emoji#readme",
   "dependencies": {
     "canvas": "^2.9.3",
-    "node-emoji": "^1.11.0"
+    "node-emoji": "^1.11.0",
+    "twemoji": "^14.0.2"
   },
   "devDependencies": {
     "@types/node": "^18.7.5",
