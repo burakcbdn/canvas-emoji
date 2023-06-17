@@ -124,22 +124,15 @@ class CanvasEmoji {
                 .replace("}", "")
                 .replace(/_/g, "-");
             let emojiSrc = `https://emojicdn.elk.sh/${emojiID}?style=${emojiStyle}`;
-            console.log(emojiData);
-            console.log("key", emojiData[emojiItem
-                .replace("{", "")
-                .replace("}", "")]);
             const key = twemoji.convert.toCodePoint(emojiData[emojiItem
                 .replace("{", "")
                 .replace("}", "")]);
-            console.log("key", key);
             if (key) {
                 const src = this.findEmojiSrcFromKey(key);
-                console.log("src", src);
                 if (src) {
                     emojiSrc = src;
                 }
             }
-            console.log(emojiSrc);
             const url = encodeURI(emojiSrc);
             const emojiImg = await (0, canvas_1.loadImage)(url);
             emojiMap.set(emojiItem, emojiImg);
