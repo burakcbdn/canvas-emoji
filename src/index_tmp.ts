@@ -97,8 +97,12 @@ export class CanvasEmoji {
 
         const key = twemoji.convert.toCodePoint(emojiName);
 
+        console.log("key", key);
+
         if (key) {
             const src = this.findEmojiSrcFromKey(key);
+
+            console.log("src", src);
 
             if (src) {
                 emojiSrc = src;
